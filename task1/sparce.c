@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 
     while ((bytes_read = read(in_fd, buffer, block_size)) > 0) {
         if (is_all_zeros(buffer, bytes_read)) {
-         
+             //  блок нулей, смещаем указатель в итоговом файле
             if (lseek(out_fd, bytes_read, SEEK_CUR) == -1) {
                 perror("lseek error");
                 exit(1);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
         }
         total_size += bytes_read;
     }
-
+    // устанавливаем итоговый размер файла, если последний блок был с дыркой
     if (ftruncate(out_fd, total_size) == -1) {
         perror("ftruncate error");
     }
